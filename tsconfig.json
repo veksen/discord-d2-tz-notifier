@@ -1,12 +1,11 @@
 {
-  "files": ["./src/index.ts"],
   "compilerOptions": {
     "esModuleInterop": true,
     "lib": ["ESNext"],
+    "module": "CommonJS",
     "moduleResolution": "node",
     "rootDir": "./src",
     "outDir": "./dist",
-    "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "target": "ESNext"
