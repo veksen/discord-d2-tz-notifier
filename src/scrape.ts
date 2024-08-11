@@ -13,10 +13,16 @@ function getTzById(tzId: TzId) {
   return TZ_ID_MAP[tzId];
 }
 
+interface D2EmuTzApiResponse {
+  current: string[];
+  next: string[];
+  next_terror_time_utc: number;
+}
+
 export async function scrape() {
   return fetch("https://www.d2emu.com/api/v1/tz")
     .then((response) => response.json())
-    .then(function (terrorZones) {
+    .then(function (terrorZones: D2EmuTzApiResponse) {
       // store the last scrape time
       const currentUtc = Math.round(Date.now() / 1000);
       lastScrape = currentUtc;
@@ -33,7 +39,7 @@ export async function scrape() {
         current: getTzById(current),
         next: {
           ...getTzById(next),
-          timeUtc: terrorZones.next_terror_time_utc as number,
+          timeUtc: terrorZones.next_terror_time_utc,
         },
       };
     });
