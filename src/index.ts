@@ -34,7 +34,8 @@ client.once(Events.ClientReady, async (readyClient) => {
   await updateTerrorZones(channel);
 
   setupScheduler(async () => {
-    updateTerrorZones(channel);
+    await channel.bulkDelete(100, true);
+    await updateTerrorZones(channel);
   });
 });
 
