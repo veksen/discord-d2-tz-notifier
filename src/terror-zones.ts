@@ -170,8 +170,16 @@ export async function setupRoles(guild: Guild) {
   });
 }
 
+let nextTz: number;
+
 export async function updateTerrorZones(channel: TextChannel) {
   const { current, next } = await scrape();
+
+  // update only if the next terror zone has changed
+  if (nextTz === next.timeUtc) {
+    return;
+  }
+  nextTz = next.timeUtc;
 
   const tzMessage = await findMessageByEmbedContent(
     channel,

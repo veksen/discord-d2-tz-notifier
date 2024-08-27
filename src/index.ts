@@ -22,8 +22,6 @@ client.once(Events.ClientReady, async (readyClient) => {
     throw new Error("Channel is not text");
   }
 
-  await channel.bulkDelete(100, true);
-
   await setupReactEmbed(channel);
   await setupRoles(channel.guild);
 
