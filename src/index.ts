@@ -10,26 +10,31 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.once(Events.ClientReady, async (readyClient) => {
   console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 
-  const channel = readyClient.channels.cache.find(
-    (channel) => channel.type !== ChannelType.DM && channel.name === "testing"
+  const tzChannel = readyClient.channels.cache.find(
+    (channel) => channel.type !== ChannelType.DM && channel.name === "tz"
+  );
+  const rolesChannel = readyClient.channels.cache.find(
+    (channel) => channel.type !== ChannelType.DM && channel.name === "tz-roles"
   );
 
-  if (!channel) {
+  if (!tzChannel || !rolesChannel) {
     throw new Error("Channel not found");
   }
 
-  if (channel.type !== ChannelType.GuildText) {
+  if (
+    tzChannel.type !== ChannelType.GuildText ||
+    rolesChannel.type !== ChannelType.GuildText
+  ) {
     throw new Error("Channel is not text");
   }
 
-  await setupReactEmbed(channel);
-  await setupRoles(channel.guild);
+  await setupReactEmbed(rolesChannel);
+  await setupRoles(rolesChannel.guild);
 
-  await updateTerrorZones(channel);
+  await updateTerrorZones(tzChannel);
 
   setupScheduler(async () => {
-    await channel.bulkDelete(100, true);
-    await updateTerrorZones(channel);
+    await updateTerrorZones(tzChannel);
   });
 });
 
