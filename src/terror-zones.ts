@@ -138,6 +138,21 @@ export async function setupReactEmbed(channel: TextChannel) {
 
   collector.on("collect", (reaction, user) => {
     console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+
+    const role = getRoleByName(
+      channel.guild,
+      `TZ ${reaction.emoji.name}-Tier XP`
+    );
+
+    if (role) {
+      channel.guild.members.fetch(user.id).then((member) => {
+        if (member.roles.cache.has(role.id)) {
+          member.roles.remove(role);
+        } else {
+          member.roles.add(role);
+        }
+      });
+    }
   });
 }
 
